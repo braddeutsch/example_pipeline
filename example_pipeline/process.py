@@ -11,6 +11,7 @@ from data.make_dataset import load_data, preprocess_data
 from models.train_model import make_pipeline
 from models.save_results import save_results
 
+__license__ = "MIT"
 
 # CONFIG ####################################################################################
 
@@ -26,7 +27,7 @@ target_name = 'target'
 timestamp_str = dt.now().strftime('%Y%m%d_%H%M%S')
 save_path = 'models/' + timestamp_str + '/'
 
-# LOAD AND PRE-PROCESS DATA ########################################################################
+# LOAD AND PRE-PROCESS DATA #################################################################
 
 # Load variable codes
 var_codes = pd.read_csv(var_codes_file)
@@ -41,14 +42,14 @@ data_clean = preprocess_data(data_all, target_map)
 df_train = data_clean.ix['train']
 df_test = data_clean.ix['test']
 
-# CREATE PIPELINE ###################################################################################
+# CREATE PIPELINE ###########################################################################
 
 # make a list of features to include
 features_to_include = var_codes[var_codes['include_gbf'] == 1]['var_name'].values
 # build pipeline
 pipeline = make_pipeline(features_to_include)
 
-# TRAIN #############################################################################################
+# TRAIN #####################################################################################
 
 # split features from target
 X = df_train[df_train.columns.drop('target')]
@@ -57,7 +58,7 @@ y = df_train['target']
 # Fit the pipeline
 model = pipeline.fit(X, y).best_estimator_
 
-# TEST AND EVAL #####################################################################################
+# TEST AND EVAL #############################################################################
 
 # separate features from target for test set
 X_test = df_test.drop('target', axis=1)
@@ -67,7 +68,7 @@ test_predictions = model.predict(X_test)
 # build report
 report = classification_report(y_test, test_predictions)
 
-# SAVE AND REPORT ###################################################################################
+# SAVE AND REPORT ###########################################################################
 
 save_results(save_path, model, report)
 print("Results and model saved in %s" % save_path)
