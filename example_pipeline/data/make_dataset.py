@@ -1,12 +1,15 @@
 import pandas as pd
 
 
-def load_data(f):
+def load_data(train_file, test_file):
     """Load data from a file into a Pandas dataframe"""
 
-    d = pd.read_csv(f, index_col=None)
+    data_train = pd.read_csv(train_file)
+    data_test = pd.read_csv(test_file)
 
-    return d
+    data_out = pd.concat([data_train, data_test], keys=['train', 'test'])
+
+    return data_out
 
 
 def preprocess_data(df, target_map):
