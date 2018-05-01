@@ -10,8 +10,8 @@ import pandas as pd
 from sklearn.metrics import classification_report
 from sklearn.exceptions import DataConversionWarning
 from data.make_dataset import load_data, preprocess_data
-from models.train_model import make_pipeline
-from models.save_results import save_results
+from modeling.train_model import make_pipeline
+from modeling.save_results import save_results
 
 __license__ = "MIT"
 
@@ -29,7 +29,7 @@ target_name = 'target'
 
 # create save path
 timestamp_str = dt.now().strftime('%Y%m%d_%H%M%S')
-save_path = 'models/' + timestamp_str + '/'
+save_path = '../output/' + timestamp_str + '/'
 
 # LOAD AND PRE-PROCESS DATA #################################################################
 
