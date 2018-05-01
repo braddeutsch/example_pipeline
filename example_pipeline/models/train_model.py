@@ -5,6 +5,11 @@ from features.build_features import featurize_cols
 
 
 def make_pipeline(features):
+    """
+    build a pipeline that includes feature building, modeling, and gridsearch
+    :param features: list of features, e.g. ['age', 'gender', ...]
+    :return: pipeline object
+    """
 
     base_pipeline = Pipeline([('featurize', featurize_cols(features)), ('gbf', GradientBoostingClassifier())])
 

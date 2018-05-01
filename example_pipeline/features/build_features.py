@@ -3,6 +3,11 @@ from sklearn_pandas import DataFrameMapper
 
 
 def featurize_cols(features):
+    """
+    Build a DataFrameMapper object, which applies a mapper to each column.
+    :param features: list of features to include, e.g. ['age', 'gender', ...]
+    :return: DataFrameMapper object
+    """
 
     transformations = [
         (['age'], StandardScaler()),
