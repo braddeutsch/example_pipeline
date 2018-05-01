@@ -5,19 +5,23 @@ produces and records test results.
 """
 
 from datetime import datetime as dt
+import warnings
 import pandas as pd
 from sklearn.metrics import classification_report
+from sklearn.exceptions import DataConversionWarning
 from data.make_dataset import load_data, preprocess_data
 from models.train_model import make_pipeline
 from models.save_results import save_results
 
 __license__ = "MIT"
 
+warnings.filterwarnings(action='ignore', category=DataConversionWarning)
+
 # CONFIG ####################################################################################
 
 # file locations
-train_file = 'c://data/example_pipeline/adult.data.txt'
-test_file = 'c://data/example_pipeline/adult.test.txt'
+train_file = '../data/adult.data.txt'
+test_file = '../data/adult.test.txt'
 var_codes_file = '../data/adult.vars.csv'
 
 # name of the target column in your data
@@ -28,6 +32,8 @@ timestamp_str = dt.now().strftime('%Y%m%d_%H%M%S')
 save_path = 'models/' + timestamp_str + '/'
 
 # LOAD AND PRE-PROCESS DATA #################################################################
+
+print('Loading and pre-processing data...')
 
 # Load variable codes
 var_codes = pd.read_csv(var_codes_file)
@@ -42,6 +48,8 @@ data_clean = preprocess_data(data_all, target_map)
 df_train = data_clean.ix['train']
 df_test = data_clean.ix['test']
 
+print('Done.')
+
 # CREATE PIPELINE ###########################################################################
 
 # make a list of features to include
@@ -51,12 +59,16 @@ pipeline = make_pipeline(features_to_include)
 
 # TRAIN #####################################################################################
 
+print('Running grid search...')
+
 # split features from target
 X = df_train[df_train.columns.drop('target')]
 y = df_train['target']
 
 # Fit the pipeline
 model = pipeline.fit(X, y).best_estimator_
+
+print('Done.')
 
 # TEST AND EVAL #############################################################################
 
