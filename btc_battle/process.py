@@ -9,7 +9,7 @@ import warnings
 import pandas as pd
 from sklearn.metrics import classification_report
 from sklearn.exceptions import DataConversionWarning
-from data.make_dataset import load_data, preprocess_data
+from data.make_dataset import load_data, preprocess_data, create_target
 from modeling.train_model import make_pipeline
 from modeling.save_results import save_results
 
@@ -20,9 +20,9 @@ warnings.filterwarnings(action='ignore', category=DataConversionWarning)
 # CONFIG ####################################################################################
 
 # file locations
-train_file = '../data/adult.data.txt'
-test_file = '../data/adult.test.txt'
-var_codes_file = '../data/adult.vars.csv'
+train_file = '../data/2017-12-16-GDAX.finalfeatures.csv'
+test_file = '../data/2017-12-16-GDAX.finalfeatures.csv'
+# var_codes_file = '../data/GDAX.vars.csv'
 
 # name of the target column in your data
 target_name = 'target'
@@ -36,13 +36,14 @@ save_path = '../output/' + timestamp_str + '/'
 print('Loading and pre-processing data...')
 
 # Load variable codes
-var_codes = pd.read_csv(var_codes_file)
+# var_codes = pd.read_csv(var_codes_file)
 # Load data
 data_all = load_data(train_file, test_file)
 
 # pre-process data. Careful to only do element-wise operations.
-target_map = {'>50K.': 1, '>50K': 1, '<=50K.': 0, '<=50K': 0}
-data_clean = preprocess_data(data_all, target_map)
+data_clean = preprocess_data(data_all)
+
+data_target = create_target(data_clean)
 
 # split data back into test and train
 df_train = data_clean.ix['train']
